@@ -1,0 +1,174 @@
+START
+
+DEFINE Structure Student {
+    String name[50]
+    Integer ID
+    String department[3]
+    Integer age
+    Character gender
+    Float cgpa
+    String mobileNumber[11]
+    Pointer next
+}
+
+DEFINE Pointer head = NULL
+
+FUNCTION addStudent():
+    DECLARE Pointer newStudent = ALLOCATE Memory for Student
+    
+    OUTPUT "Enter student name: "
+    INPUT newStudent->name
+    OUTPUT "Enter student ID: "
+    INPUT newStudent->ID
+    OUTPUT "Enter student department: "
+    INPUT newStudent->department
+    OUTPUT "Enter student age: "
+    INPUT newStudent->age
+    OUTPUT "Enter student gender (M/F): "
+    INPUT newStudent->gender
+    OUTPUT "Enter student CGPA: "
+    INPUT newStudent->cgpa
+    OUTPUT "Enter student mobile number: "
+    INPUT newStudent->mobileNumber
+    
+    newStudent->next = NULL
+
+    IF head == NULL THEN
+        head = newStudent
+    ELSE
+        DECLARE Pointer temp = head
+        WHILE temp->next != NULL DO
+            temp = temp->next
+        END WHILE
+        temp->next = newStudent
+    END IF
+    
+    OUTPUT "Student added successfully."
+
+FUNCTION searchStudentByID():
+    DECLARE Integer searchID
+    OUTPUT "Enter student ID to search: "
+    INPUT searchID
+    
+    DECLARE Pointer temp = head
+    DECLARE Integer found = 0
+    
+    WHILE temp != NULL DO
+        IF temp->ID == searchID THEN
+            OUTPUT "Student found:"
+            OUTPUT "Name:", temp->name
+            OUTPUT "ID:", temp->ID
+            OUTPUT "Department:", temp->department
+            OUTPUT "Age:", temp->age
+            OUTPUT "Gender:", temp->gender
+            OUTPUT "CGPA:", temp->cgpa
+            OUTPUT "Mobile:", temp->mobileNumber
+            SET found = 1
+            BREAK
+        END IF
+        SET temp = temp->next
+    END WHILE
+    
+    IF found == 0 THEN
+        OUTPUT "Student with ID", searchID, "not found."
+    END IF
+
+FUNCTION updateStudent():
+    DECLARE Integer updateID
+    OUTPUT "Enter student ID to update: "
+    INPUT updateID
+    
+    DECLARE Pointer temp = head
+    DECLARE Integer found = 0
+    
+    WHILE temp != NULL DO
+        IF temp->ID == updateID THEN
+            OUTPUT "Enter new CGPA: "
+            INPUT temp->cgpa
+            OUTPUT "Enter new mobile number: "
+            INPUT temp->mobileNumber
+            OUTPUT "Student information updated successfully."
+            SET found = 1
+            BREAK
+        END IF
+        SET temp = temp->next
+    END WHILE
+    
+    IF found == 0 THEN
+        OUTPUT "Student with ID", updateID, "not found."
+    END IF
+
+FUNCTION displayStudentsByDepartment():
+    DECLARE String searchDepartment[50]
+    OUTPUT "Enter department name to display students: "
+    INPUT searchDepartment
+    
+    DECLARE Pointer temp = head
+    DECLARE Integer found = 0
+    
+    OUTPUT "Students in department", searchDepartment, ":"
+    WHILE temp != NULL DO
+        IF temp->department == searchDepartment THEN
+            OUTPUT "Name:", temp->name
+            OUTPUT "ID:", temp->ID
+            OUTPUT "Age:", temp->age
+            OUTPUT "Gender:", temp->gender
+            OUTPUT "CGPA:", temp->cgpa
+            OUTPUT "Mobile:", temp->mobileNumber
+            SET found = 1
+        END IF
+        SET temp = temp->next
+    END WHILE
+    
+    IF found == 0 THEN
+        OUTPUT "No students found in department", searchDepartment, "."
+    END IF
+
+FUNCTION displayAllStudents():
+    DECLARE Pointer temp = head
+    
+    OUTPUT "List of all students:"
+    WHILE temp != NULL DO
+        OUTPUT "Name:", temp->name
+        OUTPUT "ID:", temp->ID
+        OUTPUT "Department:", temp->department
+        OUTPUT "Age:", temp->age
+        OUTPUT "Gender:", temp->gender
+        OUTPUT "CGPA:", temp->cgpa
+        OUTPUT "Mobile:", temp->mobileNumber
+        SET temp = temp->next
+    END WHILE
+
+FUNCTION main():
+    DECLARE Integer choice
+    
+    REPEAT
+        OUTPUT "\nStudent Management System"
+        OUTPUT "1. Store new student information"
+        OUTPUT "2. Search students by ID"
+        OUTPUT "3. Update student information"
+        OUTPUT "4. Display department-wise all students"
+        OUTPUT "5. Display all students"
+        OUTPUT "6. Exit"
+        OUTPUT "Enter your choice: "
+        INPUT choice
+        
+        SWITCH choice:
+            CASE 1:
+                addStudent()
+            CASE 2:
+                searchStudentByID()
+            CASE 3:
+                updateStudent()
+            CASE 4:
+                displayStudentsByDepartment()
+            CASE 5:
+                displayAllStudents()
+            CASE 6:
+                OUTPUT "Exiting..."
+            DEFAULT:
+                OUTPUT "Invalid choice. Please try again."
+        END SWITCH
+    UNTIL choice == 6
+
+END
